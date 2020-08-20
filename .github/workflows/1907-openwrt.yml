@@ -8,7 +8,7 @@
 #修改以下代码或者开启触发开关都好，要严格按格式对好,前面有多少空格也要看清楚
 #
 
-name: Lede-OpenWrt 固件
+name: 19.07-OpenWrt 固件
 
 on:
   repository_dispatch:
@@ -18,7 +18,7 @@ on:
 #    branches:
 #      - master
 #    paths:
-#      - 'diy.config'
+#      - '1907.config'
 
 
 #release发布触发开始编译(只是一个触发条件,不会发布的,又麻烦,没卵用,不用研究)
@@ -40,8 +40,8 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: diy.config
-  DIY_OP_SH: diy-lede.sh
+  CONFIG_FILE: 1907.config
+  DIY_OP_SH: 1907.sh
   SSH_ACTIONS: true
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
@@ -79,20 +79,20 @@ jobs:
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
-    - name: 加载diy-lede.sh跟feeds.conf.default设置
+    - name: 加载1907.sh跟feeds.conf.default设置
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
         chmod +x $DIY_OP_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_OP_SH
 
-    - name: 下载diy-lede.sh跟feeds.conf.default自定义软件
+    - name: 下载1907.sh跟feeds.conf.default自定义软件
       run: cd openwrt && ./scripts/feeds update -a
 
     - name: 安装自定义软件
       run: cd openwrt && ./scripts/feeds install -a
 
-    - name: 加载diy.config设置
+    - name: 加载1907.config设置
       run: |
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
