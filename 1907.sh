@@ -1,6 +1,7 @@
 #!/bin/bash
 cd openwrt
 rm -rf package/lean/luci-theme-argon  #删除源码自带的argon主题，因为最下面一个链接是增加了其他作者制作的argon主题
+#
 # Copyright (c) 2019-2020 P3TERX <https://p3terx.com>
 #
 # 说明：
