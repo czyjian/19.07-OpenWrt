@@ -10,18 +10,11 @@ rm -rf package/lean/luci-theme-argon  #删除源码自带的argon主题，因为
 # 修改openwrt登陆地址,把下面的192.168.2.2修改成你想要的就可以了，其他的不要动
 sed -i 's/192.168.1.1/192.168.2.2/g' package/base-files/files/bin/config_generate
 
+#跟LEDE的不一样，源码编译成功后就不需要登录密码的，所不需要设置密码为空
 
-sed -i 's@.*CYXluq4wUazHjmCDBCqXF*@#&@g' package/lean/default-settings/files/zzz-default-settings  #设置密码为空（安装固件时无需密码登陆，然后自己修改想要的密码）
-
-
-#内核版本是会随着源码更新而改变的，在coolsnowwolf/lede的源码查看最好，以X86机型为例，源码的target/linux/x86文件夹可以看到有几个内核版本，x86文件夹里Makefile就可以查看源码正在使用什么内核
-#修改版本内核（下面两行代码前面有#为源码默认最新5.4内核,没#为4.19内核,默认修改X86的，其他机型L大源码那里target/linux查看，对应修改下面的路径就好）
-#sed -i 's/KERNEL_PATCHVER:=5.4/KERNEL_PATCHVER:=4.19/g' ./target/linux/x86/Makefile  #修改内核版本
-#sed -i 's/KERNEL_TESTING_PATCHVER:=5.4/KERNEL_TESTING_PATCHVER:=4.19/g' ./target/linux/x86/Makefile  #修改内核版本
-
-
-#取消掉feeds.conf.default文件里面的helloworld的#注释
-sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default  #使用源码自带ShadowSocksR Plus+出国软件
+#内核版本是会随着源码更新而改变的，在Lienol/openwrt的源码查看最好，以X86机型为例，源码的target/linux/x86文件夹可以看到有几个内核版本，x86文件夹里Makefile就可以查看源码正在使用什么内核
+#修改版本内核（19.07默认使用4.14内核，还有4.19跟4.9的内核，自行选择。这个跟LEDE的有点不一样，这个是修改一行代码的）
+#sed -i 's/KERNEL_PATCHVER:=4.14/KERNEL_PATCHVER:=4.19/g' ./target/linux/x86/Makefile  #修改内核版本
 
 
 #添加自定义插件链接（自己想要什么就github里面搜索然后添加）
@@ -34,14 +27,11 @@ git clone -b lede https://github.com/pymumu/luci-app-smartdns.git package/luci-a
 git clone https://github.com/garypang13/luci-app-eqos package/luci-app-eqos  #内网IP限速工具
 
 
-#passwall出国软件
-svn co https://github.com/xiaorouji/openwrt-package/trunk/lienol/luci-app-passwall package/luci-app-passwall
-svn co https://github.com/xiaorouji/openwrt-package/trunk/package/brook package/brook
-svn co https://github.com/xiaorouji/openwrt-package/trunk/package/chinadns-ng package/chinadns-ng
-svn co https://github.com/xiaorouji/openwrt-package/trunk/package/tcping package/tcping
-svn co https://github.com/xiaorouji/openwrt-package/trunk/package/trojan-go package/trojan-go
-svn co https://github.com/xiaorouji/openwrt-package/trunk/package/trojan-plus package/trojan-plus
-svn co https://github.com/xiaorouji/openwrt-package/trunk/package/syncthing package/syncthing
+#lede的ShadowSocksR Plus+出国软件（19.07源码自带passwall出国软件）
+git clone https://github.com/fw876/helloworld.git package/luci-app-ssr-plus
+svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/redsocks2 package/redsocks2
+svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/tcpping package/tcpping
+svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/microsocks package/microsocks
 
 
 git clone https://github.com/jerrykuku/node-request.git package/node-request  #京东签到依赖
